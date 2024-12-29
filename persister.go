@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/afero"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/descriptorpb"
 	plugin_go "google.golang.org/protobuf/types/pluginpb"
 )
 
@@ -36,6 +37,9 @@ func (p *stdPersister) AddPostProcessor(proc ...PostProcessor) { p.procs = appen
 func (p *stdPersister) Persist(arts ...Artifact) *plugin_go.CodeGeneratorResponse {
 	resp := new(plugin_go.CodeGeneratorResponse)
 	resp.SupportedFeatures = p.supportedFeatures
+	onlyEdition := int32(descriptorpb.Edition_EDITION_2023)
+	resp.MaximumEdition = &onlyEdition
+	resp.MinimumEdition = &onlyEdition
 
 	for _, a := range arts {
 		switch a := a.(type) {
